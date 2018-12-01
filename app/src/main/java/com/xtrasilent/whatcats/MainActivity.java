@@ -12,7 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-
+import android.os.*;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -36,6 +36,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 import android.widget.TextView;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
@@ -68,32 +69,32 @@ public class MainActivity extends AppCompatActivity
 
     Bitmap FixBitmap;
 
-    String ImageTag = "image_tag" ;
+    String ImageTag = "image_tag";
 
-    String ImageName = "image_data" ;
+    String ImageName = "image_data";
 
-    ProgressDialog progressDialog ;
+    ProgressDialog progressDialog;
 
-    ByteArrayOutputStream byteArrayOutputStream ;
+    ByteArrayOutputStream byteArrayOutputStream;
 
-    byte[] byteArray ;
+    byte[] byteArray;
 
-    String ConvertImage ;
+    String ConvertImage;
 
     String GetImageNameFromEditText;
 
-    HttpURLConnection httpURLConnection ;
+    HttpURLConnection httpURLConnection;
 
     URL url;
 
     OutputStream outputStream;
 
-    BufferedWriter bufferedWriter ;
+    BufferedWriter bufferedWriter;
 
-    int RC ;
+    int RC;
 
 
-    BufferedReader bufferedReader ;
+    BufferedReader bufferedReader;
 
     StringBuilder stringBuilder;
 
@@ -101,43 +102,45 @@ public class MainActivity extends AppCompatActivity
 
     private int GALLERY = 1, CAMERA = 2;
     TextView welcomeText1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
 
         session = new SessionHandler(getApplicationContext());
         User user = session.getUserDetails();
         welcomeText1 = findViewById(R.id.welcomeText);
-        welcomeText1.setText("Welcome "+user.getFullName());
+        welcomeText1.setText("Welcome " + user.getFullName());
 
 
         Random rand = new Random();
 
-        int  n = rand.nextInt(500) + 1;
+        int n = rand.nextInt(500) + 1;
 
-        GetImageFromGalleryButton = (Button)findViewById(R.id.imgbtn);
+        GetImageFromGalleryButton = findViewById(R.id.imgbtn);
 
-        UploadImageOnServerButton = (Button)findViewById(R.id.uploadbtn);
+        UploadImageOnServerButton = findViewById(R.id.uploadbtn);
 
-        ShowSelectedImage = (ImageView)findViewById(R.id.imageView);
 
-        imageName=(EditText)findViewById(R.id.imageName);
+        ShowSelectedImage = findViewById(R.id.imageView);
 
-        imageName.setText("cat"+n);
+        imageName = findViewById(R.id.imageName);
+
+        imageName.setText("cat" + n);
 
 
         byteArrayOutputStream = new ByteArrayOutputStream();
@@ -166,7 +169,6 @@ public class MainActivity extends AppCompatActivity
         });
 
 
-
         if (ContextCompat.checkSelfPermission(MainActivity.this, android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 requestPermissions(new String[]{android.Manifest.permission.CAMERA},
@@ -175,15 +177,27 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    boolean doubleBackToExitPressedOnce = false;
+
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
+        if (doubleBackToExitPressedOnce) {
+            session.logoutUser();
+            finish();
         }
+
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
+
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce = false;
+            }
+        }, 2000);
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -214,18 +228,18 @@ public class MainActivity extends AppCompatActivity
             finish();
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
 
-    private void showPictureDialog(){
+    private void showPictureDialog() {
         AlertDialog.Builder pictureDialog = new AlertDialog.Builder(this);
         pictureDialog.setTitle("Select Action");
         String[] pictureDialogItems = {
                 "Photo Gallery",
-                "Camera" };
+                "Camera"};
         pictureDialog.setItems(pictureDialogItems,
                 new DialogInterface.OnClickListener() {
                     @Override
@@ -242,6 +256,7 @@ public class MainActivity extends AppCompatActivity
                 });
         pictureDialog.show();
     }
+
     public void choosePhotoFromGallary() {
         Intent galleryIntent = new Intent(Intent.ACTION_PICK,
                 android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -252,14 +267,13 @@ public class MainActivity extends AppCompatActivity
     private void takePhotoFromCamera() {
         Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(intent, CAMERA);
-        //startActivity(getIntent());
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == this.RESULT_CANCELED) {
+        if (resultCode == RESULT_CANCELED) {
             return;
         }
         if (requestCode == GALLERY) {
@@ -267,9 +281,6 @@ public class MainActivity extends AppCompatActivity
                 Uri contentURI = data.getData();
                 try {
                     FixBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), contentURI);
-                    // String path = saveImage(bitmap);
-                    //Toast.makeText(MainActivity.this, "Image Saved!", Toast.LENGTH_SHORT).show();
-                    ShowSelectedImage.setImageBitmap(FixBitmap);
                     UploadImageOnServerButton.setVisibility(View.VISIBLE);
 
                 } catch (IOException e) {
@@ -282,13 +293,11 @@ public class MainActivity extends AppCompatActivity
             FixBitmap = (Bitmap) data.getExtras().get("data");
             ShowSelectedImage.setImageBitmap(FixBitmap);
             UploadImageOnServerButton.setVisibility(View.VISIBLE);
-            //  saveImage(thumbnail);
-            //Toast.makeText(ShadiRegistrationPart5.this, "Image Saved!", Toast.LENGTH_SHORT).show();
         }
     }
 
 
-    public void UploadImageToServer(){
+    public void UploadImageToServer() {
 
         FixBitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
 
@@ -296,14 +305,14 @@ public class MainActivity extends AppCompatActivity
 
         ConvertImage = Base64.encodeToString(byteArray, Base64.DEFAULT);
 
-        class AsyncTaskUploadClass extends AsyncTask<Void,Void,String> {
+        class AsyncTaskUploadClass extends AsyncTask<Void, Void, String> {
 
             @Override
             protected void onPreExecute() {
 
                 super.onPreExecute();
 
-                progressDialog = ProgressDialog.show(MainActivity.this,"Image is Uploading","Please Wait",false,false);
+                progressDialog = ProgressDialog.show(MainActivity.this, "Image is Uploading", "Please Wait", false, false);
             }
 
             @Override
@@ -313,11 +322,11 @@ public class MainActivity extends AppCompatActivity
 
                 progressDialog.dismiss();
 
-                Toast.makeText(MainActivity.this,string1,Toast.LENGTH_LONG).show();
+                Toast.makeText(MainActivity.this, string1, Toast.LENGTH_LONG).show();
                 finish();
-                overridePendingTransition( 0, 0);
+                overridePendingTransition(0, 0);
                 startActivity(getIntent());
-                overridePendingTransition( 0, 0);
+                overridePendingTransition(0, 0);
 
             }
 
@@ -329,13 +338,13 @@ public class MainActivity extends AppCompatActivity
                 User user = session.getUserDetails();
                 String id = user.getUserID();
 
-                HashMap<String,String> HashMapParams = new HashMap<String,String>();
+                HashMap<String, String> HashMapParams = new HashMap<String, String>();
 
                 HashMapParams.put(ImageTag, GetImageNameFromEditText);
 
                 HashMapParams.put(ImageName, ConvertImage);
 
-                HashMapParams.put("user_id",id);
+                HashMapParams.put("user_id", id);
 
                 String FinalData = imageProcessClass.ImageHttpRequest("http://54.254.229.24/upload-image-to-server.php", HashMapParams);  //192.168.43.246
 
@@ -349,9 +358,9 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    public class ImageProcessClass{
+    public class ImageProcessClass {
 
-        public String ImageHttpRequest(String requestURL,HashMap<String, String> PData) {
+        public String ImageHttpRequest(String requestURL, HashMap<String, String> PData) {
 
             StringBuilder stringBuilder = new StringBuilder();
 
@@ -396,7 +405,7 @@ public class MainActivity extends AppCompatActivity
 
                     String RC2;
 
-                    while ((RC2 = bufferedReader.readLine()) != null){
+                    while ((RC2 = bufferedReader.readLine()) != null) {
 
                         stringBuilder.append(RC2);
 
@@ -438,10 +447,9 @@ public class MainActivity extends AppCompatActivity
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // Now user should be able to use camera
 
-            }
-            else {
+            } else {
 
-                Toast.makeText(MainActivity.this, "Unable to use Camera..Please Allow us to use Camera", Toast.LENGTH_LONG).show();
+                Toast.makeText(MainActivity.this, "Error to gain permission to access the camera. Please allow to use this Application", Toast.LENGTH_LONG).show();
 
             }
         }

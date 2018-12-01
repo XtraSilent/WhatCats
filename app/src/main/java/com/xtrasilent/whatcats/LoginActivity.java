@@ -25,7 +25,7 @@ public class LoginActivity extends AppCompatActivity {
     private static final String KEY_USERNAME = "username";
     private static final String KEY_PASSWORD = "password";
     private static final String KEY_EMPTY = "";
-   private static final String KEY_USER_ID = "user_id";
+    private static final String KEY_USER_ID = "user_id";
     private EditText etUsername;
     private EditText etPassword;
     private String username;
@@ -36,14 +36,12 @@ public class LoginActivity extends AppCompatActivity {
     private SessionHandler session;
 
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         session = new SessionHandler(getApplicationContext());
 
-        if(session.isLoggedIn()){
+        if (session.isLoggedIn()) {
             loadDashboard();
         }
         setContentView(R.layout.activity_login);
@@ -110,7 +108,7 @@ public class LoginActivity extends AppCompatActivity {
             //Populate the request parameters
             request.put(KEY_USERNAME, username);
             request.put(KEY_PASSWORD, password);
-            request.put(KEY_USER_ID,user_id);
+            request.put(KEY_USER_ID, user_id);
 
 
         } catch (JSONException e) {
@@ -125,10 +123,10 @@ public class LoginActivity extends AppCompatActivity {
                             //Check if user got logged in successfully
 
                             if (response.getInt(KEY_STATUS) == 0) {
-                                session.loginUser(username,response.getString(KEY_FULL_NAME),response.getString(KEY_USER_ID));
+                                session.loginUser(username, response.getString(KEY_FULL_NAME), response.getString(KEY_USER_ID));
                                 loadDashboard();
 
-                            }else{
+                            } else {
                                 Toast.makeText(getApplicationContext(),
                                         response.getString(KEY_MESSAGE), Toast.LENGTH_SHORT).show();
 
@@ -156,15 +154,16 @@ public class LoginActivity extends AppCompatActivity {
 
     /**
      * Validates inputs and shows error if any
+     *
      * @return
      */
     private boolean validateInputs() {
-        if(KEY_EMPTY.equals(username)){
+        if (KEY_EMPTY.equals(username)) {
             etUsername.setError("Username cannot be empty");
             etUsername.requestFocus();
             return false;
         }
-        if(KEY_EMPTY.equals(password)){
+        if (KEY_EMPTY.equals(password)) {
             etPassword.setError("Password cannot be empty");
             etPassword.requestFocus();
             return false;

@@ -26,11 +26,14 @@ import java.util.List;
 
 public class SecondActivity extends AppCompatActivity {
 
+    private SessionHandler session;
+
+
     List<DataAdapter> ListOfdataAdapter;
 
     RecyclerView recyclerView;
 
-    String HTTP_JSON_URL = "http://54.254.229.24/listscan.php";
+    String HTTP_JSON_URL = "http://54.254.229.24/listscan.php?id=";
 
     String Image_Name_JSON = "result";
 
@@ -38,13 +41,15 @@ public class SecondActivity extends AppCompatActivity {
 
     String username = "username";
 
-    JsonArrayRequest RequestOfJSonArray ;
+    JsonArrayRequest RequestOfJSonArray;
 
-    RequestQueue requestQueue ;
+    RequestQueue requestQueue;
 
-    View view ;
+    View view;
 
-    int RecyclerViewItemPosition ;
+    String link;
+
+    int RecyclerViewItemPosition;
 
     RecyclerView.LayoutManager layoutManagerOfrecyclerView;
 
@@ -54,11 +59,14 @@ public class SecondActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        session = new SessionHandler(getApplicationContext());
+        User user = session.getUserDetails();
+        String id = user.getUserID();
         super.onCreate(savedInstanceState);
-
+        link = HTTP_JSON_URL + id;
         setContentView(R.layout.activity_second);
-        Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        mToolbar.setTitle(getString(R.string.app_name));
+        Toolbar mToolbar = findViewById(R.id.toolbar);
+        mToolbar.setTitle("My Scanned History");
         mToolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
 
         mToolbar.setNavigationOnClickListener(view -> finish());
@@ -68,7 +76,7 @@ public class SecondActivity extends AppCompatActivity {
 
         ListOfdataAdapter = new ArrayList<>();
 
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerview1);
+        recyclerView = findViewById(R.id.recyclerview1);
 
         recyclerView.setHasFixedSize(true);
 
@@ -90,28 +98,28 @@ public class SecondActivity extends AppCompatActivity {
                 }
 
             });
+
             @Override
             public boolean onInterceptTouchEvent(RecyclerView Recyclerview, MotionEvent motionEvent) {
 
                 view = Recyclerview.findChildViewUnder(motionEvent.getX(), motionEvent.getY());
 
-                if(view != null && gestureDetector.onTouchEvent(motionEvent)) {
+                if (view != null && gestureDetector.onTouchEvent(motionEvent)) {
 
                     //Getting RecyclerView Clicked Item value.
                     RecyclerViewItemPosition = Recyclerview.getChildAdapterPosition(view);
 
                     System.out.println(RecyclerViewItemPosition);
-                    String test  = ImageTitleNameArrayListForClick.get(RecyclerViewItemPosition);
+                    String test = ImageTitleNameArrayListForClick.get(RecyclerViewItemPosition);
                     test = test.replaceAll("[\\d.%]", "");
                     // Showing RecyclerView Clicked Item value using Toast.
                     Intent intent = new Intent(Intent.ACTION_VIEW,
-                            Uri.parse("http://google.com/search?q="+test+"cat"));
+                            Uri.parse("http://google.com/search?q=" + test + "cat"));
                     startActivity(intent);
                 }
 
                 return false;
             }
-
 
 
             @Override
@@ -128,9 +136,9 @@ public class SecondActivity extends AppCompatActivity {
 
     }
 
-    public void JSON_HTTP_CALL(){
+    public void JSON_HTTP_CALL() {
 
-        RequestOfJSonArray = new JsonArrayRequest(HTTP_JSON_URL,
+        RequestOfJSonArray = new JsonArrayRequest(link,
 
                 new Response.Listener<JSONArray>() {
                     @Override
@@ -151,9 +159,9 @@ public class SecondActivity extends AppCompatActivity {
         requestQueue.add(RequestOfJSonArray);
     }
 
-    public void ParseJSonResponse(JSONArray array){
+    public void ParseJSonResponse(JSONArray array) {
 
-        for(int i = 0; i<array.length(); i++) {
+        for (int i = 0; i < array.length(); i++) {
 
             DataAdapter GetDataAdapter2 = new DataAdapter();
 

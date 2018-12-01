@@ -52,14 +52,14 @@ public class RegisterActivity extends AppCompatActivity {
         Button login = findViewById(R.id.btnRegisterLogin);
         Button register = findViewById(R.id.btnRegister);
 
-       /*//Launch Login screen when Login Button is clicked
+        // Launch Login screen when Login Button is clicked
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(RegisterActivity.this, LoginActivity.class);
                 startActivity(i);
             }
-        });*/
+        });
 
         register.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,7 +94,7 @@ public class RegisterActivity extends AppCompatActivity {
      * Launch Dashboard Activity on Successful Sign Up
      */
     private void loadDashboard() {
-        Intent i = new Intent(getApplicationContext(), LoginActivity.class);
+        Intent i = new Intent(this, LoginActivity.class);
         startActivity(i);
         finish();
 
@@ -108,7 +108,7 @@ public class RegisterActivity extends AppCompatActivity {
             request.put(KEY_USERNAME, username);
             request.put(KEY_PASSWORD, password);
             request.put(KEY_FULL_NAME, fullName);
-            request.put(KEY_USER_ID,userid);
+            request.put(KEY_USER_ID, userid);
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -117,19 +117,17 @@ public class RegisterActivity extends AppCompatActivity {
                 (Request.Method.POST, register_url, request, response -> {
                     pDialog.dismiss();
                     try {
-                        //Check if user got registered successfully
                         if (response.getInt(KEY_STATUS) == 0) {
-                            //Set the user session
-                            session.loginUser(username,fullName,userid);
-                            Intent i = new Intent(RegisterActivity.this, LoginActivity.class);
-                            startActivity(i);
+                            Toast.makeText(getApplicationContext(), "Succesfully registered! Please login to Continue", Toast.LENGTH_SHORT).show();
+                            loadDashboard();
+                            finish();
 
-                        }else if(response.getInt(KEY_STATUS) == 1){
+                        } else if (response.getInt(KEY_STATUS) == 1) {
                             //Display error message if username is already existsing
                             etUsername.setError("Username already taken!");
                             etUsername.requestFocus();
 
-                        }else{
+                        } else {
                             Toast.makeText(getApplicationContext(),
                                     response.getString(KEY_MESSAGE), Toast.LENGTH_SHORT).show();
 
@@ -156,6 +154,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     /**
      * Validates inputs and shows error if any
+     *
      * @return
      */
     private boolean validateInputs() {

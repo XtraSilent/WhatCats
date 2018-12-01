@@ -21,12 +21,14 @@
 
     <Button
         android:id="@+id/imgbtn"
-        android:layout_width="wrap_content"
+        android:layout_width="130dp"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignTop="@+id/uploadbtn"
         android:layout_marginStart="48dp"
-        android:text="@string/buttonUpload" />
+        android:background="@android:color/holo_blue_light"
+        android:text="@string/buttonUpload"
+        android:textColor="#FFFFFF" />
 
     <Button
         android:id="@+id/uploadbtn"
@@ -36,7 +38,9 @@
         android:layout_alignParentEnd="true"
         android:layout_marginBottom="16dp"
         android:layout_marginEnd="53dp"
-        android:text="@string/Upload" />
+        android:background="@color/colorAccent"
+        android:text="@string/Upload"
+        android:textColor="#FFFFFF" />
 
     <TextView
         android:id="@+id/welcomeText"
@@ -47,6 +51,7 @@
         android:layout_marginTop="77dp"
         android:fontFamily="monospace"
         android:textAlignment="center"
+        android:textColor="#FFFFFF"
         android:textSize="16sp"
         android:textStyle="bold"
         android:typeface="normal" />
@@ -59,7 +64,6 @@
         android:layout_centerHorizontal="true"
         android:inputType=""
         android:visibility="invisible" />
-
 
 
 </RelativeLayout>

@@ -4,31 +4,30 @@ package com.xtrasilent.whatcats;
  * Created by Juned on 2/8/2017.
  */
 
-public class DataAdapter
-{
+public class DataAdapter {
     public String ImageURL;
     public String ImageTitle;
     public String username;
 
-        public String getImageUrl() {
+    public String getImageUrl() {
 
-            return ImageURL;
-        }
+        return ImageURL;
+    }
 
-        public void setImageUrl(String imageServerUrl) {
+    public void setImageUrl(String imageServerUrl) {
 
-            this.ImageURL = imageServerUrl;
-        }
+        this.ImageURL = imageServerUrl;
+    }
 
-        public String getImageTitle() {
+    public String getImageTitle() {
 
-            return ImageTitle;
-        }
+        return ImageTitle;
+    }
 
-        public void setImageTitle(String Imagetitlename) {
+    public void setImageTitle(String Imagetitlename) {
 
-            this.ImageTitle = Imagetitlename;
-        }
+        this.ImageTitle = Imagetitlename;
+    }
 
     public String getUsername() {
         return username;

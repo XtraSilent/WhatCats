@@ -30,10 +30,10 @@ public class SessionHandler {
      * @param username
      * @param fullName
      */
-    public void loginUser(String username, String fullName,String userid) {
+    public void loginUser(String username, String fullName, String userid) {
         mEditor.putString(KEY_USERNAME, username);
         mEditor.putString(KEY_FULL_NAME, fullName);
-        mEditor.putString(KEY_USER_ID,userid);
+        mEditor.putString(KEY_USER_ID, userid);
         Date date = new Date();
 
         //Set user session for next 7 days
@@ -79,7 +79,7 @@ public class SessionHandler {
         User user = new User();
         user.setUsername(mPreferences.getString(KEY_USERNAME, KEY_EMPTY));
         user.setFullName(mPreferences.getString(KEY_FULL_NAME, KEY_EMPTY));
-        user.setUserID(mPreferences.getString(KEY_USER_ID,KEY_EMPTY));
+        user.setUserID(mPreferences.getString(KEY_USER_ID, KEY_EMPTY));
         user.setSessionExpiryDate(new Date(mPreferences.getLong(KEY_EXPIRES, 0)));
 
         return user;
@@ -88,7 +88,7 @@ public class SessionHandler {
     /**
      * Logs out user by clearing the session
      */
-    public void logoutUser(){
+    public void logoutUser() {
         mEditor.clear();
         mEditor.commit();
     }

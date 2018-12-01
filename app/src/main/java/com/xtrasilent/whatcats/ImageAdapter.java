@@ -12,7 +12,6 @@ import com.android.volley.toolbox.DiskBasedCache;
 import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.ImageLoader;
 
-;
 /**
  * Created by Juned on 2/8/2017.
  */
@@ -21,13 +20,13 @@ public class ImageAdapter {
 
     public static ImageAdapter imageAdapter;
 
-    public Network networkOBJ ;
+    public Network networkOBJ;
 
     public RequestQueue requestQueue1;
 
     public ImageLoader Imageloader1;
 
-    public Cache cache1 ;
+    public Cache cache1;
 
     public static Context context1;
 
@@ -35,7 +34,7 @@ public class ImageAdapter {
 
     private ImageAdapter(Context context) {
 
-        this.context1 = context;
+        context1 = context;
 
         this.requestQueue1 = RequestQueueFunction();
 

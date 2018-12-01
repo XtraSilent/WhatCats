@@ -1,6 +1,7 @@
 package com.xtrasilent.whatcats;
 
 import java.util.Date;
+
 public class User {
     String username;
     String fullName;

@@ -24,7 +24,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     ImageLoader imageLoader;
 
-    public RecyclerViewAdapter(List<DataAdapter> getDataAdapter, Context context){
+    public RecyclerViewAdapter(List<DataAdapter> getDataAdapter, Context context) {
 
         super();
         this.dataAdapters = getDataAdapter;
@@ -44,7 +44,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public void onBindViewHolder(ViewHolder Viewholder, int position) {
 
-        DataAdapter dataAdapterOBJ =  dataAdapters.get(position);
+        DataAdapter dataAdapterOBJ = dataAdapters.get(position);
 
         imageLoader = ImageAdapter.getInstance(context).getImageLoader();
 
@@ -59,7 +59,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         Viewholder.VollyImageView.setImageUrl(dataAdapterOBJ.getImageUrl(), imageLoader);
 
         Viewholder.ImageTitleTextView.setText(dataAdapterOBJ.getImageTitle());
-        Viewholder.Username1.setText("Scanned By :"+dataAdapterOBJ.getUsername());
+        Viewholder.Username1.setText("Scanned By :" + dataAdapterOBJ.getUsername());
 
 
     }
@@ -70,20 +70,20 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         return dataAdapters.size();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder{
+    class ViewHolder extends RecyclerView.ViewHolder {
 
         public TextView ImageTitleTextView;
         public TextView Username1;
-        public NetworkImageView VollyImageView ;
+        public NetworkImageView VollyImageView;
 
         public ViewHolder(View itemView) {
 
             super(itemView);
 
-            ImageTitleTextView = (TextView) itemView.findViewById(R.id.ImageNameTextView) ;
+            ImageTitleTextView = itemView.findViewById(R.id.ImageNameTextView);
 
-            VollyImageView = (NetworkImageView) itemView.findViewById(R.id.VolleyImageView) ;
-            Username1 = (TextView) itemView.findViewById(R.id.username) ;
+            VollyImageView = itemView.findViewById(R.id.VolleyImageView);
+            Username1 = itemView.findViewById(R.id.username);
 
 
         }
