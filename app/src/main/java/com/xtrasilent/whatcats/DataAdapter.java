@@ -5,6 +5,7 @@ package com.xtrasilent.whatcats;
  */
 
 public class DataAdapter {
+    public String imageid;
     public String ImageURL;
     public String ImageTitle;
     public String username;
@@ -35,5 +36,21 @@ public class DataAdapter {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getImageid() {
+        return imageid;
+    }
+
+    public void setImageid(String imageid) {
+        this.imageid = imageid;
+    }
+
+    public String getImageURL() {
+        return ImageURL;
+    }
+
+    public void setImageURL(String imageURL) {
+        ImageURL = imageURL;
     }
 }

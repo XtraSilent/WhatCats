@@ -10,12 +10,16 @@ import android.support.v7.widget.Toolbar;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
+
+import android.view.View.OnClickListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -41,6 +45,8 @@ public class SecondActivity extends AppCompatActivity {
 
     String username = "username";
 
+    String Imageid = "imageid";
+
     JsonArrayRequest RequestOfJSonArray;
 
     RequestQueue requestQueue;
@@ -48,7 +54,7 @@ public class SecondActivity extends AppCompatActivity {
     View view;
 
     String link;
-
+    ImageButton deletebutton;
     int RecyclerViewItemPosition;
 
     RecyclerView.LayoutManager layoutManagerOfrecyclerView;
@@ -66,6 +72,8 @@ public class SecondActivity extends AppCompatActivity {
         link = HTTP_JSON_URL + id;
         setContentView(R.layout.activity_second);
         Toolbar mToolbar = findViewById(R.id.toolbar);
+        deletebutton = findViewById(R.id.deletebutton);
+
         mToolbar.setTitle("My Scanned History");
         mToolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
 
@@ -84,6 +92,7 @@ public class SecondActivity extends AppCompatActivity {
 
         recyclerView.setLayoutManager(layoutManagerOfrecyclerView);
 
+
         JSON_HTTP_CALL();
 
         // Implementing Click Listener on RecyclerView.
@@ -99,6 +108,7 @@ public class SecondActivity extends AppCompatActivity {
 
             });
 
+
             @Override
             public boolean onInterceptTouchEvent(RecyclerView Recyclerview, MotionEvent motionEvent) {
 
@@ -108,14 +118,14 @@ public class SecondActivity extends AppCompatActivity {
 
                     //Getting RecyclerView Clicked Item value.
                     RecyclerViewItemPosition = Recyclerview.getChildAdapterPosition(view);
-
-                    System.out.println(RecyclerViewItemPosition);
-                    String test = ImageTitleNameArrayListForClick.get(RecyclerViewItemPosition);
+                    /*String test = ImageTitleNameArrayListForClick.get(RecyclerViewItemPosition);
                     test = test.replaceAll("[\\d.%]", "");
                     // Showing RecyclerView Clicked Item value using Toast.
-                    Intent intent = new Intent(Intent.ACTION_VIEW,
+                   Intent intent = new Intent(Intent.ACTION_VIEW,
                             Uri.parse("http://google.com/search?q=" + test + "cat"));
-                    startActivity(intent);
+                    startActivity(intent);*/
+
+
                 }
 
                 return false;
@@ -171,7 +181,7 @@ public class SecondActivity extends AppCompatActivity {
                 json = array.getJSONObject(i);
 
                 GetDataAdapter2.setImageTitle(json.getString(Image_Name_JSON));
-
+                GetDataAdapter2.setImageid(json.getString(Imageid));
                 // Adding image title name in array to display on RecyclerView click event.
                 ImageTitleNameArrayListForClick.add(json.getString(Image_Name_JSON));
 
