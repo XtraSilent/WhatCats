@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
+
 public class delete extends AppCompatActivity {
     TextView Imagetitle;
     TextView Imageid;
@@ -58,7 +59,10 @@ public class delete extends AppCompatActivity {
 
         ImageView imageView = findViewById(R.id.catimage);
 
-        Glide.with(this).load(imageurl).into(imageView);
+        Glide.with(this)
+                .load(imageurl)
+                .into(Image);
+
 
     }
 
