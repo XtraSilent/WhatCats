@@ -2,25 +2,30 @@ package com.xtrasilent.whatcats;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.net.Uri;
+
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
+public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> implements Filterable {
 
     Context context;
     ImageButton deletebutton;
     List<DataAdapter> dataAdapters;
+    List<DataAdapter> mArrayList;
 
     ImageLoader imageLoader;
 
@@ -29,6 +34,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         super();
         this.dataAdapters = getDataAdapter;
+        this.mArrayList = getDataAdapter;
         this.context = context;
     }
 
@@ -90,6 +96,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         return dataAdapters.size();
     }
 
+
     class ViewHolder extends RecyclerView.ViewHolder {
 
         public TextView ImageTitleTextView;
@@ -109,4 +116,45 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         }
     }
+
+    @Override
+    public Filter getFilter() {
+
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+
+                String charString = charSequence.toString();
+
+                if (charString.isEmpty()) {
+
+                    dataAdapters = mArrayList;
+                } else {
+
+                    ArrayList<DataAdapter> filteredList = new ArrayList<>();
+
+                    for (DataAdapter catname : mArrayList) {
+
+                        if (catname.getImageTitle().toLowerCase().contains(charString)) {
+
+                            filteredList.add(catname);
+                        }
+                    }
+
+                    dataAdapters = filteredList;
+                }
+
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = dataAdapters;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+                dataAdapters = (ArrayList<DataAdapter>) filterResults.values;
+                notifyDataSetChanged();
+            }
+        };
+    }
 }
+

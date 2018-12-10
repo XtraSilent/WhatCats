@@ -1,25 +1,25 @@
 package com.xtrasilent.whatcats;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.GestureDetector;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.Volley;
-
-import android.view.View.OnClickListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -59,7 +59,7 @@ public class SecondActivity extends AppCompatActivity {
 
     RecyclerView.LayoutManager layoutManagerOfrecyclerView;
 
-    RecyclerView.Adapter recyclerViewadapter;
+    RecyclerViewAdapter recyclerViewadapter;
 
     ArrayList<String> ImageTitleNameArrayListForClick;
 
@@ -76,9 +76,14 @@ public class SecondActivity extends AppCompatActivity {
 
         mToolbar.setTitle("My Scanned History");
         mToolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
-
-        mToolbar.setNavigationOnClickListener(view -> finish());
-
+        setSupportActionBar(mToolbar);
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(SecondActivity.this, MainActivity.class);
+                startActivity(i);
+            }
+        });
 
         ImageTitleNameArrayListForClick = new ArrayList<>();
 
@@ -118,19 +123,12 @@ public class SecondActivity extends AppCompatActivity {
 
                     //Getting RecyclerView Clicked Item value.
                     RecyclerViewItemPosition = Recyclerview.getChildAdapterPosition(view);
-                    /*String test = ImageTitleNameArrayListForClick.get(RecyclerViewItemPosition);
-                    test = test.replaceAll("[\\d.%]", "");
-                    // Showing RecyclerView Clicked Item value using Toast.
-                   Intent intent = new Intent(Intent.ACTION_VIEW,
-                            Uri.parse("http://google.com/search?q=" + test + "cat"));
-                    startActivity(intent);*/
 
 
                 }
 
                 return false;
             }
-
 
             @Override
             public void onTouchEvent(RecyclerView Recyclerview, MotionEvent motionEvent) {
@@ -145,6 +143,39 @@ public class SecondActivity extends AppCompatActivity {
 
 
     }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+
+        MenuItem search = menu.findItem(R.id.ic_search);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(search);
+        search(searchView);
+        return true;
+
+    }
+
+    /*
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_refresh) {
+            finish();
+            overridePendingTransition(0, 0);
+            startActivity(getIntent());
+            overridePendingTransition(0, 0);
+        }
+
+        return super.onOptionsItemSelected(item);
+    }*/
+
 
     public void JSON_HTTP_CALL() {
 
@@ -199,5 +230,26 @@ public class SecondActivity extends AppCompatActivity {
         recyclerViewadapter = new RecyclerViewAdapter(ListOfdataAdapter, this);
 
         recyclerView.setAdapter(recyclerViewadapter);
+
+
+    }
+
+
+    private void search(SearchView searchView) {
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+
+                recyclerViewadapter.getFilter().filter(newText);
+                return true;
+            }
+        });
     }
 }
