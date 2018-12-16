@@ -36,7 +36,7 @@
             <Button
                 android:id="@+id/btndelete"
                 android:layout_width="match_parent"
-                android:layout_height="67dp"
+                android:layout_height="match_parent"
                 android:background="#c80245"
                 android:text="Delete"
                 android:textColor="#FFFFFF" />

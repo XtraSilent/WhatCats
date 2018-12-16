@@ -25,8 +25,17 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -83,15 +92,19 @@ public class MainActivity extends AppCompatActivity
 
     int RC;
 
+    private static final String KEY_STATUS = "result";
+    String URLserver = "http://54.254.229.24/upload-image-to-server.php"; //http://54.254.229.24/upload-image-to-server.php
+    LinearLayout ln2;
 
     BufferedReader bufferedReader;
 
     StringBuilder stringBuilder;
-
+    Button tryagain;
     boolean check = true;
 
     private int GALLERY = 1, CAMERA = 2;
     TextView welcomeText1;
+    TextView result;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,11 +119,13 @@ public class MainActivity extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-
+        result = findViewById(R.id.result);
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
 
+        ln2 = findViewById(R.id.linear2);
+        tryagain = findViewById(R.id.tryagain);
         session = new SessionHandler(getApplicationContext());
         User user = session.getUserDetails();
         welcomeText1 = findViewById(R.id.welcomeText);
@@ -128,6 +143,7 @@ public class MainActivity extends AppCompatActivity
 
         ShowSelectedImage = findViewById(R.id.imageView);
 
+
         imageName = findViewById(R.id.imageName);
 
         imageName.setText("cat" + n + millis);
@@ -144,7 +160,17 @@ public class MainActivity extends AppCompatActivity
 
             }
         });
+        tryagain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
+                overridePendingTransition(0, 0);
+                startActivity(getIntent());
+                overridePendingTransition(0, 0);
+
+
+            }
+        });
 
         UploadImageOnServerButton.setOnClickListener(new View.OnClickListener() {
 
@@ -152,8 +178,12 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View view) {
 
                 GetImageNameFromEditText = imageName.getText().toString();
-                UploadImageToServer();
-                // finish();
+
+                if (FixBitmap == null) {
+                    Toast.makeText(MainActivity.this, "Please Select/capture Image first!!", Toast.LENGTH_SHORT).show();
+                    //UploadImageOnServerButton.setEnabled(false);
+                } else
+                    UploadImageToServer();
 
             }
         });
@@ -225,6 +255,8 @@ public class MainActivity extends AppCompatActivity
 
 
     private void showPictureDialog() {
+
+
         AlertDialog.Builder pictureDialog = new AlertDialog.Builder(this);
         pictureDialog.setTitle("Select Action");
         String[] pictureDialogItems = {
@@ -291,9 +323,11 @@ public class MainActivity extends AppCompatActivity
 
         FixBitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
 
+
         byteArray = byteArrayOutputStream.toByteArray();
 
         ConvertImage = Base64.encodeToString(byteArray, Base64.DEFAULT);
+
 
         class AsyncTaskUploadClass extends AsyncTask<Void, Void, String> {
 
@@ -303,20 +337,119 @@ public class MainActivity extends AppCompatActivity
                 super.onPreExecute();
 
                 progressDialog = ProgressDialog.show(MainActivity.this, "Image is Uploading", "Please Wait", false, false);
+
             }
 
             @Override
             protected void onPostExecute(String string1) {
 
+                UploadImageOnServerButton.setVisibility(View.GONE);
+                GetImageFromGalleryButton.setVisibility(View.GONE);
+                /* RequestQueue requestQueue = Volley.newRequestQueue(MainActivity.this);
+                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, URLserver, null,
+
+                        response -> {
+                            VolleyLog.v("response:",response.toString());
+                        },
+                        error -> {
+
+                        });
+                //add request to queue
+                requestQueue.add(jsonObjectRequest);*/
+
+
+               /* RequestQueue requestQueue = Volley.newRequestQueue(MainActivity.this);
+                StringRequest stringRequest =  new StringRequest(Request.Method.POST, URLserver,
+                        new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                result.setText(response);
+                                System.out.println("****************"+response);
+                                requestQueue.stop();
+                                /*finish();
+                                overridePendingTransition(0, 0);
+                                startActivity(getIntent());
+                                overridePendingTransition(0, 0);
+                            }
+                        }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        result.setText("Something happen...");
+                        error.printStackTrace();
+                        requestQueue.stop();
+                        finish();
+                        overridePendingTransition(0, 0);
+                        startActivity(getIntent());
+                        overridePendingTransition(0, 0);
+                    }
+                }
+                );
+
+                MySingleton.getInstance(MainActivity.this).addToRequestQueue(stringRequest);*/
+
+                JsonObjectRequest jsObjRequest = new JsonObjectRequest
+                        (Request.Method.POST, URLserver, null, new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                try {
+
+                                    JSONObject obj = new JSONObject(response.toString());
+
+                                    String results = obj.getString("result");
+                                    if (results != null) {
+
+
+                                        ln2.setVisibility(View.VISIBLE);
+                                        tryagain.setVisibility(View.VISIBLE);
+                                        result.setText(results);
+
+
+                                    } else {
+
+                                        ln2.setVisibility(View.VISIBLE);
+                                        tryagain.setVisibility(View.VISIBLE);
+                                        //UploadImageOnServerButton.setVisibility(View.GONE);
+                                        // GetImageFromGalleryButton.setVisibility(View.GONE);
+                                        result.setText("This Not A cat maybe...");
+
+                                    }
+
+
+                                } catch (JSONException e) {
+                                    result.setText(e.toString());
+                                    ln2.setVisibility(View.VISIBLE);
+                                    tryagain.setVisibility(View.VISIBLE);
+                                    //UploadImageOnServerButton.setVisibility(View.GONE);
+                                    //GetImageFromGalleryButton.setVisibility(View.GONE);
+                                    result.setText("Something Wrong with the server!");
+                                }
+                            }
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                result.setText(error.toString());
+                                ln2.setVisibility(View.VISIBLE);
+                                tryagain.setVisibility(View.VISIBLE);
+                                UploadImageOnServerButton.setVisibility(View.GONE);
+                                GetImageFromGalleryButton.setVisibility(View.GONE);
+                                result.setText("TRY AGAIN");
+                            }
+                        }) {
+                    @Override
+                    public Map<String, String> getHeaders() {
+                        Map<String, String> params = new HashMap<String, String>();
+                        params.put("Content-Type", "application/x-www-form-urlencoded");
+                        return params;
+                    }
+                };
+                // Access the RequestQueue through your singleton class.
+                MySingleton.getInstance(MainActivity.this).addToRequestQueue(jsObjRequest);
                 super.onPostExecute(string1);
 
-                progressDialog.dismiss();
 
+                progressDialog.dismiss();
                 Toast.makeText(MainActivity.this, string1, Toast.LENGTH_LONG).show();
-                finish();
-                overridePendingTransition(0, 0);
-                startActivity(getIntent());
-                overridePendingTransition(0, 0);
+
 
             }
 
@@ -336,7 +469,7 @@ public class MainActivity extends AppCompatActivity
 
                 HashMapParams.put("user_id", id);
 
-                String FinalData = imageProcessClass.ImageHttpRequest("http://54.254.229.24/upload-image-to-server.php", HashMapParams);  //192.168.43.246
+                String FinalData = imageProcessClass.ImageHttpRequest(URLserver, HashMapParams);  //192.168.43.246
 
                 return FinalData;
 

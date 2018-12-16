@@ -2,6 +2,7 @@ package com.xtrasilent.whatcats;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,6 +15,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -144,6 +146,30 @@ public class SecondActivity extends AppCompatActivity {
 
     }
 
+    boolean doubleBackToExitPressedOnce = false;
+
+    @Override
+    public void onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            session.logoutUser();
+            finish();
+        } else {
+            finish();
+            Intent i = new Intent(SecondActivity.this, MainActivity.class);
+            startActivity(i);
+        }
+
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
+
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce = false;
+            }
+        }, 3000);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -247,7 +273,10 @@ public class SecondActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextChange(String newText) {
 
-                recyclerViewadapter.getFilter().filter(newText);
+                if (recyclerViewadapter != null) {
+                    recyclerViewadapter.getFilter().filter(newText);
+                }
+
                 return true;
             }
         });

@@ -69,6 +69,15 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         Viewholder.ImageTitleTextView.setText(dataAdapterOBJ.getImageTitle());
         Viewholder.Username1.setText("Scanned By :" + dataAdapterOBJ.getUsername());
 
+
+        Viewholder.deletebtn.setOnClickListener((View) -> {
+            Intent i = new Intent(context.getApplicationContext(), delete.class);
+            i.putExtra("image_id", dataAdapterOBJ.getImageid());
+            i.putExtra("image_url", dataAdapterOBJ.getImageURL());
+            i.putExtra("image_title", dataAdapterOBJ.getImageTitle());
+            context.startActivity(i);
+        });
+
         Viewholder.relative.setOnClickListener((View) -> {
             String test = dataAdapterOBJ.getImageTitle();
             test = test.replaceAll("[\\d.%]", "");
@@ -78,13 +87,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             context.startActivity(intent);
         });
 
-        deletebutton.setOnClickListener((View) -> {
-            Intent i = new Intent(context.getApplicationContext(), delete.class);
-            i.putExtra("image_id", dataAdapterOBJ.getImageid());
-            i.putExtra("image_url", dataAdapterOBJ.getImageURL());
-            i.putExtra("image_title", dataAdapterOBJ.getImageTitle());
-            context.startActivity(i);
-        });
 
 
 
@@ -103,6 +105,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         public TextView Username1;
         public NetworkImageView VollyImageView;
         public RelativeLayout relative;
+        public ImageButton deletebtn;
         public ViewHolder(View itemView) {
 
             super(itemView);
@@ -110,8 +113,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             ImageTitleTextView = itemView.findViewById(R.id.ImageNameTextView);
             VollyImageView = itemView.findViewById(R.id.VolleyImageView);
             Username1 = itemView.findViewById(R.id.username);
-            deletebutton = itemView.findViewById(R.id.deletebutton);
             relative = itemView.findViewById(R.id.deleteHis);
+            deletebtn = itemView.findViewById(R.id.deletebutton);
 
 
         }
