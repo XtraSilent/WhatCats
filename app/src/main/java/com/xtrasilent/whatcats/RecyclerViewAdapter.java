@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageButton;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.toolbox.ImageLoader;
@@ -104,7 +104,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         public TextView ImageTitleTextView;
         public TextView Username1;
         public NetworkImageView VollyImageView;
-        public RelativeLayout relative;
+        public LinearLayout relative;
         public ImageButton deletebtn;
         public ViewHolder(View itemView) {
 
