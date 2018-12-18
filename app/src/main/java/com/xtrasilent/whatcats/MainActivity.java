@@ -1,7 +1,6 @@
 package com.xtrasilent.whatcats;
 
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -92,7 +91,6 @@ public class MainActivity extends AppCompatActivity
 
     int RC;
 
-    private static final String KEY_STATUS = "result";
     String URLserver = "http://54.254.229.24/upload-image-to-server.php"; //http://54.254.229.24/upload-image-to-server.php
     LinearLayout ln2;
 
@@ -129,7 +127,7 @@ public class MainActivity extends AppCompatActivity
         session = new SessionHandler(getApplicationContext());
         User user = session.getUserDetails();
         welcomeText1 = findViewById(R.id.welcomeText);
-        welcomeText1.setText("Welcome " + user.getFullName());
+        welcomeText1.setText("Welcome\n" + user.getFullName() + "\n");
 
 
         Random rand = new Random();
@@ -180,7 +178,7 @@ public class MainActivity extends AppCompatActivity
                 GetImageNameFromEditText = imageName.getText().toString();
 
                 if (FixBitmap == null) {
-                    Toast.makeText(MainActivity.this, "Please Select/capture Image first!!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "Please select/capture image first!!", Toast.LENGTH_SHORT).show();
                     //UploadImageOnServerButton.setEnabled(false);
                 } else
                     UploadImageToServer();
@@ -263,17 +261,14 @@ public class MainActivity extends AppCompatActivity
                 "Photo Gallery",
                 "Camera"};
         pictureDialog.setItems(pictureDialogItems,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        switch (which) {
-                            case 0:
-                                choosePhotoFromGallary();
-                                break;
-                            case 1:
-                                takePhotoFromCamera();
-                                break;
-                        }
+                (dialog, which) -> {
+                    switch (which) {
+                        case 0:
+                            choosePhotoFromGallary();
+                            break;
+                        case 1:
+                            takePhotoFromCamera();
+                            break;
                     }
                 });
         pictureDialog.show();
@@ -321,6 +316,9 @@ public class MainActivity extends AppCompatActivity
 
     public void UploadImageToServer() {
 
+        UploadImageOnServerButton.setVisibility(View.GONE);
+        GetImageFromGalleryButton.setVisibility(View.GONE);
+
         FixBitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
 
 
@@ -331,108 +329,52 @@ public class MainActivity extends AppCompatActivity
 
         class AsyncTaskUploadClass extends AsyncTask<Void, Void, String> {
 
+
             @Override
             protected void onPreExecute() {
 
                 super.onPreExecute();
-
-                progressDialog = ProgressDialog.show(MainActivity.this, "Image is Uploading", "Please Wait", false, false);
-
+                progressDialog = ProgressDialog.show(MainActivity.this, "", "Uploading.....");
             }
 
             @Override
             protected void onPostExecute(String string1) {
 
-                UploadImageOnServerButton.setVisibility(View.GONE);
-                GetImageFromGalleryButton.setVisibility(View.GONE);
-                /* RequestQueue requestQueue = Volley.newRequestQueue(MainActivity.this);
-                JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, URLserver, null,
 
-                        response -> {
-                            VolleyLog.v("response:",response.toString());
-                        },
-                        error -> {
-
-                        });
-                //add request to queue
-                requestQueue.add(jsonObjectRequest);*/
-
-
-               /* RequestQueue requestQueue = Volley.newRequestQueue(MainActivity.this);
-                StringRequest stringRequest =  new StringRequest(Request.Method.POST, URLserver,
-                        new Response.Listener<String>() {
-                            @Override
-                            public void onResponse(String response) {
-                                result.setText(response);
-                                System.out.println("****************"+response);
-                                requestQueue.stop();
-                                /*finish();
-                                overridePendingTransition(0, 0);
-                                startActivity(getIntent());
-                                overridePendingTransition(0, 0);
-                            }
-                        }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        result.setText("Something happen...");
-                        error.printStackTrace();
-                        requestQueue.stop();
-                        finish();
-                        overridePendingTransition(0, 0);
-                        startActivity(getIntent());
-                        overridePendingTransition(0, 0);
-                    }
-                }
-                );
-
-                MySingleton.getInstance(MainActivity.this).addToRequestQueue(stringRequest);*/
-
+                ln2.setVisibility(View.VISIBLE);
+                tryagain.setVisibility(View.VISIBLE);
                 JsonObjectRequest jsObjRequest = new JsonObjectRequest
-                        (Request.Method.POST, URLserver, null, new Response.Listener<JSONObject>() {
-                            @Override
-                            public void onResponse(JSONObject response) {
-                                try {
+                        (Request.Method.POST, URLserver, null, response -> {
+                            try {
 
-                                    JSONObject obj = new JSONObject(response.toString());
+                                JSONObject obj = new JSONObject(response.toString());
 
-                                    String results = obj.getString("result");
-                                    if (results != null) {
+                                String results = obj.getString("result");
+                                if (results != null) {
 
-
-                                        ln2.setVisibility(View.VISIBLE);
-                                        tryagain.setVisibility(View.VISIBLE);
-                                        result.setText(results);
+                                    result.setText(results);
+                                    progressDialog.dismiss();
 
 
-                                    } else {
+                                } else {
 
-                                        ln2.setVisibility(View.VISIBLE);
-                                        tryagain.setVisibility(View.VISIBLE);
-                                        //UploadImageOnServerButton.setVisibility(View.GONE);
-                                        // GetImageFromGalleryButton.setVisibility(View.GONE);
-                                        result.setText("This Not A cat maybe...");
+                                    result.setText("This Not A cat maybe...");
+                                    progressDialog.dismiss();
 
-                                    }
-
-
-                                } catch (JSONException e) {
-                                    result.setText(e.toString());
-                                    ln2.setVisibility(View.VISIBLE);
-                                    tryagain.setVisibility(View.VISIBLE);
-                                    //UploadImageOnServerButton.setVisibility(View.GONE);
-                                    //GetImageFromGalleryButton.setVisibility(View.GONE);
-                                    result.setText("Something Wrong with the server!");
                                 }
+
+                            } catch (JSONException e) {
+                                result.setTextSize(14);
+                                result.setText("Something Wrong with the server!");
+                                progressDialog.dismiss();
                             }
                         }, new Response.ErrorListener() {
                             @Override
                             public void onErrorResponse(VolleyError error) {
-                                result.setText(error.toString());
-                                ln2.setVisibility(View.VISIBLE);
-                                tryagain.setVisibility(View.VISIBLE);
-                                UploadImageOnServerButton.setVisibility(View.GONE);
-                                GetImageFromGalleryButton.setVisibility(View.GONE);
-                                result.setText("TRY AGAIN");
+                                //result.setText(error.toString());
+                                result.setTextSize(14);
+                                result.setText("Something Wrong with the server!");
+                                progressDialog.dismiss();
                             }
                         }) {
                     @Override
@@ -445,11 +387,6 @@ public class MainActivity extends AppCompatActivity
                 // Access the RequestQueue through your singleton class.
                 MySingleton.getInstance(MainActivity.this).addToRequestQueue(jsObjRequest);
                 super.onPostExecute(string1);
-
-
-                progressDialog.dismiss();
-                Toast.makeText(MainActivity.this, string1, Toast.LENGTH_LONG).show();
-
 
             }
 
