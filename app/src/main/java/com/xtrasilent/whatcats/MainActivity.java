@@ -29,8 +29,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 
 import org.json.JSONException;
@@ -57,52 +55,35 @@ import javax.net.ssl.HttpsURLConnection;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private SessionHandler session;
     Button GetImageFromGalleryButton, UploadImageOnServerButton;
-
-
     ImageView ShowSelectedImage;
-
     EditText imageName;
-
     Bitmap FixBitmap;
-
     String ImageTag = "image_tag";
-
     String ImageName = "image_data";
-
-    ProgressDialog progressDialog;
-
     ByteArrayOutputStream byteArrayOutputStream;
-
     byte[] byteArray;
 
+    //ProgressDialog progressDialog;
     String ConvertImage;
-
     String GetImageNameFromEditText;
-
     HttpURLConnection httpURLConnection;
-
     URL url;
-
     OutputStream outputStream;
-
     BufferedWriter bufferedWriter;
-
     int RC;
-
     String URLserver = "http://54.254.229.24/upload-image-to-server.php"; //http://54.254.229.24/upload-image-to-server.php
     LinearLayout ln2;
-
     BufferedReader bufferedReader;
-
     StringBuilder stringBuilder;
     Button tryagain;
     boolean check = true;
-
-    private int GALLERY = 1, CAMERA = 2;
     TextView welcomeText1;
     TextView result;
+    boolean doubleBackToExitPressedOnce = false;
+    private SessionHandler session;
+    private ProgressDialog progressDialog;
+    private int GALLERY = 1, CAMERA = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,6 +92,7 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         long millis = System.currentTimeMillis() % 1000;
+
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -158,32 +140,25 @@ public class MainActivity extends AppCompatActivity
 
             }
         });
-        tryagain.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        tryagain.setOnClickListener(view -> {
 
-                overridePendingTransition(0, 0);
-                startActivity(getIntent());
-                overridePendingTransition(0, 0);
+            overridePendingTransition(0, 0);
+            startActivity(getIntent());
+            overridePendingTransition(0, 0);
 
 
-            }
         });
 
-        UploadImageOnServerButton.setOnClickListener(new View.OnClickListener() {
+        UploadImageOnServerButton.setOnClickListener(view -> {
 
-            @Override
-            public void onClick(View view) {
+            GetImageNameFromEditText = imageName.getText().toString();
 
-                GetImageNameFromEditText = imageName.getText().toString();
+            if (FixBitmap == null) {
+                Toast.makeText(MainActivity.this, "Please select/capture image first!!", Toast.LENGTH_SHORT).show();
+                //UploadImageOnServerButton.setEnabled(false);
+            } else
+                UploadImageToServer();
 
-                if (FixBitmap == null) {
-                    Toast.makeText(MainActivity.this, "Please select/capture image first!!", Toast.LENGTH_SHORT).show();
-                    //UploadImageOnServerButton.setEnabled(false);
-                } else
-                    UploadImageToServer();
-
-            }
         });
 
 
@@ -194,8 +169,6 @@ public class MainActivity extends AppCompatActivity
             }
         }
     }
-
-    boolean doubleBackToExitPressedOnce = false;
 
     @Override
     public void onBackPressed() {
@@ -319,6 +292,7 @@ public class MainActivity extends AppCompatActivity
         UploadImageOnServerButton.setVisibility(View.GONE);
         GetImageFromGalleryButton.setVisibility(View.GONE);
 
+
         FixBitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
 
 
@@ -329,12 +303,12 @@ public class MainActivity extends AppCompatActivity
 
         class AsyncTaskUploadClass extends AsyncTask<Void, Void, String> {
 
-
             @Override
             protected void onPreExecute() {
 
+                progressDialog = ProgressDialog.show(MainActivity.this, "Image is Uploading", "Please Wait", false, false);
                 super.onPreExecute();
-                progressDialog = ProgressDialog.show(MainActivity.this, "", "Uploading.....");
+
             }
 
             @Override
@@ -343,6 +317,8 @@ public class MainActivity extends AppCompatActivity
 
                 ln2.setVisibility(View.VISIBLE);
                 tryagain.setVisibility(View.VISIBLE);
+
+
                 JsonObjectRequest jsObjRequest = new JsonObjectRequest
                         (Request.Method.POST, URLserver, null, response -> {
                             try {
@@ -354,28 +330,19 @@ public class MainActivity extends AppCompatActivity
 
                                     result.setText(results);
                                     progressDialog.dismiss();
-
-
-                                } else {
-
-                                    result.setText("This Not A cat maybe...");
-                                    progressDialog.dismiss();
-
                                 }
 
                             } catch (JSONException e) {
                                 result.setTextSize(14);
-                                result.setText("Something Wrong with the server!");
+                                //result.setText(e.toString());
+                                result.setText("Not A cat maybe..");
                                 progressDialog.dismiss();
                             }
-                        }, new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                //result.setText(error.toString());
-                                result.setTextSize(14);
-                                result.setText("Something Wrong with the server!");
-                                progressDialog.dismiss();
-                            }
+                        }, error -> {
+                            // result.setText(error.toString());
+                            result.setTextSize(14);
+                            result.setText("Something Wrong with the server!");
+                            progressDialog.dismiss();
                         }) {
                     @Override
                     public Map<String, String> getHeaders() {
@@ -416,6 +383,21 @@ public class MainActivity extends AppCompatActivity
         AsyncTaskUploadClassOBJ.execute();
 
 
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 5) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Now user should be able to use camera
+
+            } else {
+
+                Toast.makeText(MainActivity.this, "Error to gain permission to access the camera. Please allow to use this Application", Toast.LENGTH_LONG).show();
+
+            }
+        }
     }
 
     public class ImageProcessClass {
@@ -498,20 +480,5 @@ public class MainActivity extends AppCompatActivity
             return stringBuilder.toString();
         }
 
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == 5) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Now user should be able to use camera
-
-            } else {
-
-                Toast.makeText(MainActivity.this, "Error to gain permission to access the camera. Please allow to use this Application", Toast.LENGTH_LONG).show();
-
-            }
-        }
     }
 }

@@ -88,36 +88,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         });
 
 
-
-
     }
 
     @Override
     public int getItemCount() {
 
         return dataAdapters.size();
-    }
-
-
-    class ViewHolder extends RecyclerView.ViewHolder {
-
-        public TextView ImageTitleTextView;
-        public TextView Username1;
-        public NetworkImageView VollyImageView;
-        public LinearLayout relative;
-        public ImageButton deletebtn;
-        public ViewHolder(View itemView) {
-
-            super(itemView);
-
-            ImageTitleTextView = itemView.findViewById(R.id.ImageNameTextView);
-            VollyImageView = itemView.findViewById(R.id.VolleyImageView);
-            Username1 = itemView.findViewById(R.id.username);
-            relative = itemView.findViewById(R.id.deleteHis);
-            deletebtn = itemView.findViewById(R.id.deletebutton);
-
-
-        }
     }
 
     @Override
@@ -158,6 +134,28 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 notifyDataSetChanged();
             }
         };
+    }
+
+    class ViewHolder extends RecyclerView.ViewHolder {
+
+        public TextView ImageTitleTextView;
+        public TextView Username1;
+        public NetworkImageView VollyImageView;
+        public LinearLayout relative;
+        public ImageButton deletebtn;
+
+        public ViewHolder(View itemView) {
+
+            super(itemView);
+
+            ImageTitleTextView = itemView.findViewById(R.id.ImageNameTextView);
+            VollyImageView = itemView.findViewById(R.id.VolleyImageView);
+            Username1 = itemView.findViewById(R.id.username);
+            relative = itemView.findViewById(R.id.deleteHis);
+            deletebtn = itemView.findViewById(R.id.deletebutton);
+
+
+        }
     }
 }
 

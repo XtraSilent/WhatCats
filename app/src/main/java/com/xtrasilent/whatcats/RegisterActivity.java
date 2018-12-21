@@ -69,9 +69,11 @@ public class RegisterActivity extends AppCompatActivity {
                 password = etPassword.getText().toString().trim();
                 confirmPassword = etConfirmPassword.getText().toString().trim();
                 fullName = etFullName.getText().toString().trim();
+                //fullName = fullName.substring(0, 1).toUpperCase() + fullName.substring(1);
                 if (validateInputs()) {
                     registerUser();
                 }
+
 
             }
         });
@@ -158,6 +160,8 @@ public class RegisterActivity extends AppCompatActivity {
      * @return
      */
     private boolean validateInputs() {
+
+
         if (KEY_EMPTY.equals(fullName)) {
             etFullName.setError("Full Name cannot be empty");
             etFullName.requestFocus();
@@ -185,6 +189,7 @@ public class RegisterActivity extends AppCompatActivity {
             etConfirmPassword.requestFocus();
             return false;
         }
+
 
         return true;
     }

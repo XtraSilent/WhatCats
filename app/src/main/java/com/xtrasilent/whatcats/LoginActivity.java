@@ -16,7 +16,6 @@ import com.android.volley.toolbox.JsonObjectRequest;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONArray;
 
 public class LoginActivity extends AppCompatActivity {
     private static final String KEY_STATUS = "status";
