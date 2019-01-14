@@ -37,6 +37,10 @@
         <activity
             android:name=".delete"
             android:theme="@style/AppTheme.delete" />
+        <activity android:name=".ResetPass">
+
+        </activity>
+
     </application>
 
 </manifest>

@@ -12,7 +12,7 @@
     <ImageView
         android:id="@+id/imageView5"
         android:layout_width="wrap_content"
-        android:layout_height="250dp"
+        android:layout_height="200dp"
         android:layout_above="@id/Ln2"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
@@ -42,15 +42,16 @@
             android:typeface="normal" />
 
         <EditText
-            android:id="@+id/etUsername"
+            android:id="@+id/email"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_margin="5dp"
             android:background="@android:color/white"
-            android:hint="@string/username"
-            android:inputType="textPersonName"
+            android:hint="Email"
+            android:inputType="textEmailAddress"
             android:padding="10dp"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:typeface="normal" />
 
 
         <EditText

@@ -21,18 +21,20 @@ public class RegisterActivity extends AppCompatActivity {
     private static final String KEY_STATUS = "status";
     private static final String KEY_MESSAGE = "message";
     private static final String KEY_FULL_NAME = "full_name";
-    private static final String KEY_USERNAME = "username";
+    private static final String KEY_EMAIL = "email";
     private static final String KEY_PASSWORD = "password";
     private static final String KEY_EMPTY = "";
     private static final String KEY_USER_ID = "user_id";
-    private EditText etUsername;
+
     private EditText etPassword;
     private EditText etConfirmPassword;
     private EditText etFullName;
-    private String username;
+    private EditText email;
+
     private String password;
     private String confirmPassword;
     private String fullName;
+    private String Email;
     private String userid;
     private ProgressDialog pDialog;
     private String register_url = "http://54.254.229.24/register.php";
@@ -44,10 +46,12 @@ public class RegisterActivity extends AppCompatActivity {
         session = new SessionHandler(getApplicationContext());
         setContentView(R.layout.activity_register);
 
-        etUsername = findViewById(R.id.etUsername);
+
         etPassword = findViewById(R.id.etPassword);
         etConfirmPassword = findViewById(R.id.etConfirmPassword);
         etFullName = findViewById(R.id.etFullName);
+        email = findViewById(R.id.email);
+
 
         Button login = findViewById(R.id.btnRegisterLogin);
         Button register = findViewById(R.id.btnRegister);
@@ -65,10 +69,10 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //Retrieve the data entered in the edit texts
-                username = etUsername.getText().toString().toLowerCase().trim();
                 password = etPassword.getText().toString().trim();
                 confirmPassword = etConfirmPassword.getText().toString().trim();
                 fullName = etFullName.getText().toString().trim();
+                Email = email.getText().toString().trim();
                 //fullName = fullName.substring(0, 1).toUpperCase() + fullName.substring(1);
                 if (validateInputs()) {
                     registerUser();
@@ -107,10 +111,11 @@ public class RegisterActivity extends AppCompatActivity {
         JSONObject request = new JSONObject();
         try {
             //Populate the request parameters
-            request.put(KEY_USERNAME, username);
             request.put(KEY_PASSWORD, password);
             request.put(KEY_FULL_NAME, fullName);
             request.put(KEY_USER_ID, userid);
+            request.put(KEY_EMAIL, Email);
+
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -125,9 +130,9 @@ public class RegisterActivity extends AppCompatActivity {
                             finish();
 
                         } else if (response.getInt(KEY_STATUS) == 1) {
-                            //Display error message if username is already existsing
-                            etUsername.setError("Username already taken!");
-                            etUsername.requestFocus();
+                            //Display error message if email is already existsing
+                            email.setError("email already taken!");
+                            email.requestFocus();
 
                         } else {
                             Toast.makeText(getApplicationContext(),
@@ -168,11 +173,7 @@ public class RegisterActivity extends AppCompatActivity {
             return false;
 
         }
-        if (KEY_EMPTY.equals(username)) {
-            etUsername.setError("Username cannot be empty");
-            etUsername.requestFocus();
-            return false;
-        }
+
         if (KEY_EMPTY.equals(password)) {
             etPassword.setError("Password cannot be empty");
             etPassword.requestFocus();
@@ -187,6 +188,12 @@ public class RegisterActivity extends AppCompatActivity {
         if (!password.equals(confirmPassword)) {
             etConfirmPassword.setError("Password and Confirm Password does not match");
             etConfirmPassword.requestFocus();
+            return false;
+        }
+
+        if (KEY_EMAIL.equals(email)) {
+            email.setError("Email cannot be empty");
+            email.requestFocus();
             return false;
         }
 

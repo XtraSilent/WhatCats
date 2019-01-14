@@ -9,60 +9,76 @@
     android:padding="50dp"
     tools:context="com.xtrasilent.whatcats.LoginActivity">
 
-    <ImageView
-        android:id="@+id/imageView"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="205dp"
-        android:layout_marginBottom="20dp"
-        android:scaleType="center"
-        android:src="@mipmap/cat" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/etLoginUsername"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:background="@android:color/white"
-        android:hint="@string/username"
-        android:inputType="textPersonName"
-        android:padding="10dp" />
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="148dp"
+            android:layout_marginBottom="20dp"
+            android:scaleType="fitCenter"
+            android:src="@mipmap/cat" />
 
+        <EditText
+            android:id="@+id/etLoginUsername"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:background="@android:color/white"
+            android:hint="Email"
+            android:inputType="textEmailAddress|textPersonName"
+            android:padding="10dp" />
 
-    <EditText
-        android:id="@+id/etLoginPassword"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:background="@android:color/white"
-        android:hint="@string/password"
-        android:inputType="textPassword"
-        android:padding="10dp" />
+        <EditText
+            android:id="@+id/etLoginPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:background="@android:color/white"
+            android:hint="@string/password"
+            android:inputType="textPassword"
+            android:padding="10dp" />
 
-    <Button
-        android:id="@+id/btnLogin"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:background="#cc0000"
-        android:text="@string/sign_in"
-        android:textColor="@android:color/white" />
+        <Button
+            android:id="@+id/btnLogin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:background="#cc0000"
+            android:text="@string/sign_in"
+            android:textColor="@android:color/white" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:gravity="center"
-        android:text="@string/not_having_account"
-        android:textColor="#ccc" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:text="@string/not_having_account"
+            android:textColor="#ccc" />
 
-    <Button
-        android:id="@+id/btnLoginRegister"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:background="#99ccff"
-        android:text="@string/register"
-        android:textColor="@android:color/white" />
+        <Button
+            android:id="@+id/btnLoginRegister"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:background="#99ccff"
+            android:text="@string/register"
+            android:textColor="@android:color/white" />
+
+        <Button
+            android:id="@+id/fPass"
+            android:layout_width="match_parent"
+            android:layout_height="33dp"
+            android:background="@android:color/transparent"
+            android:text="Reset Password"
+            android:textAlignment="center"
+            android:textAllCaps="false"
+            android:textColor="#FFFFFF" />
+
+    </LinearLayout>
 
 
 </LinearLayout>
