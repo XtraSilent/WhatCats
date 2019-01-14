@@ -8,7 +8,7 @@ public class DataAdapter {
     public String imageid;
     public String ImageURL;
     public String ImageTitle;
-    public String username;
+    public String fullname;
 
     public String getImageUrl() {
 
@@ -30,12 +30,12 @@ public class DataAdapter {
         this.ImageTitle = Imagetitlename;
     }
 
-    public String getUsername() {
-        return username;
+    public String getFullname() {
+        return fullname;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setFullname(String fullname) {
+        this.fullname = fullname;
     }
 
     public String getImageid() {

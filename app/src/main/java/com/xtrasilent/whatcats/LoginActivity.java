@@ -30,6 +30,7 @@ public class LoginActivity extends AppCompatActivity {
     private String username;
     private String password;
     private int user_id;
+    private Button resetpass;
     private ProgressDialog pDialog;
     private String login_url = "http://54.254.229.24/login.php";
     private SessionHandler session;
@@ -51,6 +52,9 @@ public class LoginActivity extends AppCompatActivity {
         Button register = findViewById(R.id.btnLoginRegister);
         Button login = findViewById(R.id.btnLogin);
 
+        resetpass = findViewById(R.id.fPass);
+
+
         //Launch Registration screen when Register Button is clicked
         register.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,6 +75,16 @@ public class LoginActivity extends AppCompatActivity {
                 if (validateInputs()) {
                     login();
                 }
+            }
+        });
+
+        resetpass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(LoginActivity.this, ResetPass.class);
+                startActivity(i);
+                finish();
+
             }
         });
     }

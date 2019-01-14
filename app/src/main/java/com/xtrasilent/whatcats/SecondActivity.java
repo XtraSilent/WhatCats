@@ -32,38 +32,24 @@ import java.util.List;
 
 public class SecondActivity extends AppCompatActivity {
 
-    private SessionHandler session;
-
-
     List<DataAdapter> ListOfdataAdapter;
-
     RecyclerView recyclerView;
-
     String HTTP_JSON_URL = "http://54.254.229.24/listscan.php?id=";
-
     String Image_Name_JSON = "result";
-
     String Image_URL_JSON = "image_path";
-
-    String username = "username";
-
+    String fullname = "full_name";
     String Imageid = "imageid";
-
     JsonArrayRequest RequestOfJSonArray;
-
     RequestQueue requestQueue;
-
     View view;
-
     String link;
     ImageButton deletebutton;
     int RecyclerViewItemPosition;
-
     RecyclerView.LayoutManager layoutManagerOfrecyclerView;
-
     RecyclerViewAdapter recyclerViewadapter;
-
     ArrayList<String> ImageTitleNameArrayListForClick;
+    boolean doubleBackToExitPressedOnce = false;
+    private SessionHandler session;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,8 +132,6 @@ public class SecondActivity extends AppCompatActivity {
 
     }
 
-    boolean doubleBackToExitPressedOnce = false;
-
     @Override
     public void onBackPressed() {
         if (doubleBackToExitPressedOnce) {
@@ -182,25 +166,6 @@ public class SecondActivity extends AppCompatActivity {
         return true;
 
     }
-
-    /*
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_refresh) {
-            finish();
-            overridePendingTransition(0, 0);
-            startActivity(getIntent());
-            overridePendingTransition(0, 0);
-        }
-
-        return super.onOptionsItemSelected(item);
-    }*/
 
 
     public void JSON_HTTP_CALL() {
@@ -239,12 +204,11 @@ public class SecondActivity extends AppCompatActivity {
 
                 GetDataAdapter2.setImageTitle(json.getString(Image_Name_JSON));
                 GetDataAdapter2.setImageid(json.getString(Imageid));
-                // Adding image title name in array to display on RecyclerView click event.
                 ImageTitleNameArrayListForClick.add(json.getString(Image_Name_JSON));
 
                 GetDataAdapter2.setImageUrl(json.getString(Image_URL_JSON));
 
-                GetDataAdapter2.setUsername(json.getString(username));
+                GetDataAdapter2.setFullname(json.getString(fullname));
 
             } catch (JSONException e) {
 

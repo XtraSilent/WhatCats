@@ -67,7 +67,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         Viewholder.VollyImageView.setImageUrl(dataAdapterOBJ.getImageUrl(), imageLoader);
         Viewholder.ImageTitleTextView.setText(dataAdapterOBJ.getImageTitle());
-        Viewholder.Username1.setText("Scanned By :" + dataAdapterOBJ.getUsername());
+        Viewholder.Username1.setText("Scanned By :" + dataAdapterOBJ.getFullname());
 
 
         Viewholder.deletebtn.setOnClickListener((View) -> {

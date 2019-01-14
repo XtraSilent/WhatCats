@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity
     String ImageName = "image_data";
     ByteArrayOutputStream byteArrayOutputStream;
     byte[] byteArray;
-
+    String FinalData;
     //ProgressDialog progressDialog;
     String ConvertImage;
     String GetImageNameFromEditText;
@@ -175,7 +175,10 @@ public class MainActivity extends AppCompatActivity
         if (doubleBackToExitPressedOnce) {
             session.logoutUser();
             finish();
+        } else {
+
         }
+
 
         this.doubleBackToExitPressedOnce = true;
         Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
@@ -186,7 +189,7 @@ public class MainActivity extends AppCompatActivity
             public void run() {
                 doubleBackToExitPressedOnce = false;
             }
-        }, 2000);
+        }, 1000);
     }
 
 
@@ -334,14 +337,12 @@ public class MainActivity extends AppCompatActivity
 
                             } catch (JSONException e) {
                                 result.setTextSize(14);
-                                //result.setText(e.toString());
-                                result.setText("Not A cat maybe..");
+                                result.setText(e.toString());
                                 progressDialog.dismiss();
                             }
                         }, error -> {
-                            // result.setText(error.toString());
                             result.setTextSize(14);
-                            result.setText("Something Wrong with the server!");
+                            result.setText(error.toString());
                             progressDialog.dismiss();
                         }) {
                     @Override
@@ -373,7 +374,7 @@ public class MainActivity extends AppCompatActivity
 
                 HashMapParams.put("user_id", id);
 
-                String FinalData = imageProcessClass.ImageHttpRequest(URLserver, HashMapParams);  //192.168.43.246
+                FinalData = imageProcessClass.ImageHttpRequest(URLserver, HashMapParams);
 
                 return FinalData;
 
