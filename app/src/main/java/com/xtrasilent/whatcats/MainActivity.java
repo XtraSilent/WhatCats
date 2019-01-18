@@ -274,18 +274,17 @@ public class MainActivity extends AppCompatActivity
                 Uri contentURI = data.getData();
                 try {
                     FixBitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), contentURI);
-                    UploadImageOnServerButton.setVisibility(View.VISIBLE);
+                    ShowSelectedImage.setImageBitmap(FixBitmap);
 
                 } catch (IOException e) {
                     e.printStackTrace();
-                    Toast.makeText(MainActivity.this, "Failed!", Toast.LENGTH_SHORT).show();
                 }
             }
 
         } else if (requestCode == CAMERA) {
             FixBitmap = (Bitmap) data.getExtras().get("data");
             ShowSelectedImage.setImageBitmap(FixBitmap);
-            UploadImageOnServerButton.setVisibility(View.VISIBLE);
+            //UploadImageOnServerButton.setVisibility(View.VISIBLE);
         }
     }
 
