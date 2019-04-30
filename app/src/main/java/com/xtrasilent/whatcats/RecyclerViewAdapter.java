@@ -3,6 +3,7 @@ package com.xtrasilent.whatcats;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,15 +23,12 @@ import java.util.List;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> implements Filterable {
 
-    Context context;
-    ImageButton deletebutton;
-    List<DataAdapter> dataAdapters;
-    List<DataAdapter> mArrayList;
-
-    ImageLoader imageLoader;
+    private Context context;
+    private List<DataAdapter> dataAdapters;
+    private List<DataAdapter> mArrayList;
 
 
-    public RecyclerViewAdapter(List<DataAdapter> getDataAdapter, Context context) {
+    RecyclerViewAdapter(List<DataAdapter> getDataAdapter, Context context) {
 
         super();
         this.dataAdapters = getDataAdapter;
@@ -38,23 +36,20 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         this.context = context;
     }
 
+    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview, parent, false);
-
-        ViewHolder viewHolder = new ViewHolder(view);
-
-
-        return viewHolder;
+        return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder Viewholder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder Viewholder, int position) {
 
         DataAdapter dataAdapterOBJ = dataAdapters.get(position);
 
-        imageLoader = ImageAdapter.getInstance(context).getImageLoader();
+        ImageLoader imageLoader = ImageAdapter.getInstance(context).getImageLoader();
 
         imageLoader.get(dataAdapterOBJ.getImageUrl(),
                 ImageLoader.getImageListener(
@@ -138,13 +133,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView ImageTitleTextView;
-        public TextView Username1;
-        public NetworkImageView VollyImageView;
-        public LinearLayout relative;
-        public ImageButton deletebtn;
+        private TextView ImageTitleTextView;
+        private TextView Username1;
+        private NetworkImageView VollyImageView;
+        private LinearLayout relative;
+        private ImageButton deletebtn;
 
-        public ViewHolder(View itemView) {
+        private ViewHolder(View itemView) {
 
             super(itemView);
 

@@ -9,6 +9,19 @@
     android:padding="50dp"
     tools:context="com.xtrasilent.whatcats.LoginActivity">
 
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="serif-monospace"
+        android:text="What Cat?"
+        android:textAlignment="center"
+        android:textAllCaps="true"
+        android:textColor="#FFFFFF"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:typeface="serif" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"

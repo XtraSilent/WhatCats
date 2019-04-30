@@ -138,9 +138,10 @@ public class SecondActivity extends AppCompatActivity {
             session.logoutUser();
             finish();
         } else {
-            finish();
+
             Intent i = new Intent(SecondActivity.this, MainActivity.class);
             startActivity(i);
+            finish();
         }
 
         this.doubleBackToExitPressedOnce = true;

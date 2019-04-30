@@ -189,7 +189,7 @@ public class MainActivity extends AppCompatActivity
             public void run() {
                 doubleBackToExitPressedOnce = false;
             }
-        }, 1000);
+        }, 4000);
     }
 
 
@@ -215,6 +215,7 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_gallery) {
             Intent i = new Intent(MainActivity.this, SecondActivity.class);
             startActivity(i);
+            finish();
         } else if (id == R.id.nav_share) {
             session.logoutUser();
             Intent i = new Intent(MainActivity.this, LoginActivity.class);
@@ -341,7 +342,8 @@ public class MainActivity extends AppCompatActivity
                             }
                         }, error -> {
                             result.setTextSize(14);
-                            result.setText(error.toString());
+                            //result.setText(error.toString());
+                            result.setText("Cat Breed not Found!");
                             progressDialog.dismiss();
                         }) {
                     @Override

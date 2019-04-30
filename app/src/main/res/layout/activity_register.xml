@@ -39,6 +39,7 @@
             android:inputType="textPersonName"
             android:padding="10dp"
             android:textSize="14sp"
+            android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
             android:typeface="normal" />
 
         <EditText

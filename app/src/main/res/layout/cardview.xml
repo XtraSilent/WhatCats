@@ -48,6 +48,7 @@
                 android:layout_toEndOf="@+id/VolleyImageView"
                 android:layout_toRightOf="@+id/VolleyImageView"
                 android:text="TextView"
+                android:paddingLeft="10dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
                 android:textSize="18sp" />
 
@@ -59,6 +60,7 @@
                 android:layout_alignStart="@+id/ImageNameTextView"
                 android:layout_marginBottom="41dp"
                 android:text="name"
+                android:paddingLeft="10dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
                 android:textSize="14sp" />
         </LinearLayout>

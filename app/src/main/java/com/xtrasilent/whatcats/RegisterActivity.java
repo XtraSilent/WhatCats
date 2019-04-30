@@ -30,7 +30,6 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText etConfirmPassword;
     private EditText etFullName;
     private EditText email;
-
     private String password;
     private String confirmPassword;
     private String fullName;
@@ -39,6 +38,7 @@ public class RegisterActivity extends AppCompatActivity {
     private ProgressDialog pDialog;
     private String register_url = "http://54.254.229.24/register.php";
     private SessionHandler session;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,14 +68,19 @@ public class RegisterActivity extends AppCompatActivity {
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Retrieve the data entered in the edit texts
                 password = etPassword.getText().toString().trim();
-                confirmPassword = etConfirmPassword.getText().toString().trim();
-                fullName = etFullName.getText().toString().trim();
-                Email = email.getText().toString().trim();
-                //fullName = fullName.substring(0, 1).toUpperCase() + fullName.substring(1);
-                if (validateInputs()) {
-                    registerUser();
+                if (password.length() < 8) {
+                    etPassword.setError("Password cannot less than 8 character");
+                    etPassword.requestFocus();
+                } else {
+                    password = etPassword.getText().toString().trim();
+                    confirmPassword = etConfirmPassword.getText().toString().trim();
+                    fullName = etFullName.getText().toString().trim();
+                    Email = email.getText().toString().trim();
+
+                    if (validateInputs()) {
+                        registerUser();
+                    }
                 }
 
 
@@ -178,6 +183,7 @@ public class RegisterActivity extends AppCompatActivity {
             etPassword.setError("Password cannot be empty");
             etPassword.requestFocus();
             return false;
+
         }
 
         if (KEY_EMPTY.equals(confirmPassword)) {
